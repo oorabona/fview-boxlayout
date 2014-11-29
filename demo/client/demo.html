@@ -1,0 +1,61 @@
+<head>
+  <title>famous-resizebleImage demo</title>
+  <meta name="viewport" content="width=device-width, maximum-scale=1, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+</head>
+
+<body>
+  {{#famousContext id="mainCtx"}}
+    {{>demo}}
+  {{/famousContext}}
+</body>
+
+<template name="demo">
+  {{#GridLayout dimensions="[3,3]" size="[undefined,undefined]"}}
+    {{#famousEach blocks}}
+      {{#Modifier transform="eval:Transform.scale(0.9,0.9,1.0)" align="[.5,.5]" origin="[.5,.5]"}}
+      {{> boxLayout margins=this}}
+      {{/Modifier}}
+    {{/famousEach}}
+  {{/GridLayout}}
+</template>
+
+<template name="boxLayout2">
+  {{#BoxLayout margins=margins}}
+    {{>Surface target="topLeft" template="box" class="topLeft"}}
+    {{>Surface target="top" template="box" class="top"}}
+    {{>Surface target="topRight" template="box" class="topRight"}}
+    {{>Surface target="left" template="box" class="left"}}
+    {{>Surface target="middle" template="middle" class="middle"}}
+    {{>Surface target="right" template="box" class="right"}}
+    {{>Surface target="bottomLeft" template="box" class="bottomLeft"}}
+    {{>Surface target="bottom" template="box" class="bottom"}}
+    {{>Surface target="bottomRight" template="box" class="bottomRight"}}
+  {{/BoxLayout}}
+</template>
+
+<template name="boxLayout">
+  {{#BoxLayout id="layout" margins=margins}}
+    {{#each expectedTargets}}
+      {{#if isEq this 'middle'}}
+        {{>Surface target=this template="middle" class=this}}
+      {{else}}
+        {{>Surface target=this template="box" class=this}}
+      {{/if}}
+    {{/each}}
+  {{/BoxLayout}}
+</template>
+
+<template name="box">
+  <div class="center">
+    .{{../target}}
+  </div>
+</template>
+
+<template name="middle">
+  Margins: [{{margins}}]
+  <div class="center">.middle</div>
+</template>
