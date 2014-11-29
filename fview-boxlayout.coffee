@@ -3,7 +3,9 @@
 FView.ready ->
   # import dependencies
   FlexibleLayout = famous.views.FlexibleLayout
-  {View,Modifier,RenderNode} = famous.core
+  View = famous.core.View
+  Modifier = famous.core.Modifier
+  RenderNode = famous.core.RenderNode
 
   ###*
   @class
