@@ -18,42 +18,50 @@ FView.ready ->
       super @options
 
       @id = famous.core.Entity.register @
-      @_expectedTargets = []
-
-      # normalize margins
-      if @options.margins.length is 0
-        @margins = [
-          0
-          0
-          0
-          0
-        ]
-      else if @options.margins.length is 1
-        @margins = [
-          @options.margins[0]
-          @options.margins[0]
-          @options.margins[0]
-          @options.margins[0]
-        ]
-      else if @options.margins.length is 2
-        @margins = [
-          @options.margins[0]
-          @options.margins[1]
-          @options.margins[0]
-          @options.margins[1]
-        ]
-      else
-        @margins = @options.margins
-
-      # create layout
-      FView.log.debug "BoxLayout #{JSON.stringify @options} has margins #{@margins}"
-      @add @_createLayout()
+      @_update()
       return
 
   ###*
-  Creates and returns the top-level renderable
+  Updates margins, called on construction and when updating attributes reactively.
   ###
-  BoxLayout::_createLayout = (horizontal) ->
+  BoxLayout::_update = ->
+    @_expectedTargets = []
+
+    # normalize margins
+    if @options.margins.length is 0
+      @margins = [
+        0
+        0
+        0
+        0
+      ]
+    else if @options.margins.length is 1
+      @margins = [
+        @options.margins[0]
+        @options.margins[0]
+        @options.margins[0]
+        @options.margins[0]
+      ]
+    else if @options.margins.length is 2
+      @margins = [
+        @options.margins[0]
+        @options.margins[1]
+        @options.margins[0]
+        @options.margins[1]
+      ]
+    else
+      @margins = @options.margins
+
+    # create layout
+    FView.log.debug "BoxLayout #{JSON.stringify @options} has margins #{@margins}"
+    @add @_createLayout()
+
+  ###*
+  Creates and returns the top-level renderable
+  ---
+  Removed 'horizontal' parameter (unused)
+  ###
+  BoxLayout::_createLayout = ->
     margins = @margins
     ratios = undefined
     renderables = []
@@ -139,7 +147,7 @@ FView.ready ->
         `undefined`
       ])
     if modifier
-      renderNode = new RenderNode(modifier)
+      renderNode = new RenderNode modifier
       renderNode.add vertLayout
       renderNode
     else
@@ -214,10 +222,16 @@ FView.ready ->
     # Save expected target name in our variables
     @_expectedTargets.push name
 
-    # Create modifier and renderable
-    modifier = new Modifier(size: size)
-    renderable = new RenderNode(modifier)
-    this[name] = renderable
+    # Check if we already have this surface in our tree.
+    renderable = this[name]
+    if renderable
+      # If already exists, update size (maybe a better way than using _object ?)
+      renderable._object.setSize size
+    else
+      # Create modifier and renderable
+      modifier = new Modifier(size: size)
+      renderable = new RenderNode(modifier)
+      this[name] = renderable
     renderable
 
   FView.registerView 'BoxLayout', BoxLayout,
@@ -227,8 +241,12 @@ FView.ready ->
       unless target
         throw new Error 'BoxLayout children must specify target="top[Left|Right]/left/middle/right/bottom[Left|Right]"'
       unless @view[target]
-        FView.log.info "#{target} will be discarded."
+        FView.log.warn "#{target} will be discarded."
         return
       @view[target].add child_fview
+    attrUpdate: (key,value) ->
+      if key is 'margins'
+        @view.options[key] = value
+        @view._update()
 
   return
