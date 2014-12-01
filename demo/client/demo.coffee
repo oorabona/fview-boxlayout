@@ -1,51 +1,53 @@
 # Demo
 
 # Create example box-layouts
-defaultGrid = (SZ) ->
-  [
-    []
-    [SZ]
+@Demo =
+  defaultGrid: (SZ=60) ->
     [
-      SZ
-      0
+      []
+      [SZ]
+      [
+        SZ
+        0
+      ]
+      [
+        0
+        SZ
+      ]
+      [
+        SZ
+        0
+        0
+        0
+      ]
+      [
+        0
+        SZ
+        0
+        0
+      ]
+      [
+        0
+        0
+        SZ
+        0
+      ]
+      [
+        0
+        0
+        0
+        SZ
+      ]
+      [
+        SZ - 10
+        SZ
+        SZ - 20
+        SZ + 10
+      ]
     ]
-    [
-      0
-      SZ
-    ]
-    [
-      SZ
-      0
-      0
-      0
-    ]
-    [
-      0
-      SZ
-      0
-      0
-    ]
-    [
-      0
-      0
-      SZ
-      0
-    ]
-    [
-      0
-      0
-      0
-      SZ
-    ]
-    [
-      SZ - 10
-      SZ
-      SZ - 20
-      SZ + 10
-    ]
-  ]
 
-Session.setDefault 'default_grid', defaultGrid 60
+# Sets default grid to the original demo size
+Session.setDefault 'grid', Demo.defaultGrid 60
 
 FView.ready ->
   famous.polyfills
@@ -57,7 +59,7 @@ FView.ready ->
 
 Template.demo.helpers
   blocks: ->
-    grid = Session.get 'default_grid'
+    grid = Session.get 'grid'
     grid.map (margin, idx) ->
       {
         id: "layout-#{idx}"

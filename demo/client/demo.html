@@ -17,14 +17,14 @@
   {{#GridLayout dimensions="[3,3]" size="[undefined,undefined]"}}
     {{#famousEach blocks}}
       {{#Modifier transform="eval:Transform.scale(0.9,0.9,1.0)" align="[.5,.5]" origin="[.5,.5]"}}
-      {{> boxLayout margins=this}}
+        {{> boxLayout this}}
       {{/Modifier}}
     {{/famousEach}}
   {{/GridLayout}}
 </template>
 
 <template name="boxLayout2">
-  {{#BoxLayout margins=margins}}
+  {{#BoxLayout margins=[60]}}
     {{>Surface target="topLeft" template="box" class="topLeft"}}
     {{>Surface target="top" template="box" class="top"}}
     {{>Surface target="topRight" template="box" class="topRight"}}
@@ -38,12 +38,12 @@
 </template>
 
 <template name="boxLayout">
-  {{#BoxLayout id="layout" margins=margins}}
+  {{#BoxLayout this}}
     {{#each expectedTargets}}
       {{#if isEq this 'middle'}}
-        {{>Surface target=this template="middle" class=this}}
+        {{>Surface modifier="StateModifier" target=this template="middle" class=this}}
       {{else}}
-        {{>Surface target=this template="box" class=this}}
+        {{>Surface modifier="StateModifier" target=this template="box" class=this}}
       {{/if}}
     {{/each}}
   {{/BoxLayout}}
