@@ -1,7 +1,7 @@
 Package.describe({
   name: 'oorabona:fview-boxlayout',
   summary: 'A BoxLayout plugin for Meteor Famous Views',
-  version: '0.1.0',
+  version: '0.2.0',
   git: 'https://github.com/oorabona/fview-boxlayout.git'
 });
 
@@ -14,10 +14,12 @@ Package.onUse(function(api) {
   // included as weak references.
   api.use('mjn:famous@0.3.1_2', 'client', { weak: true });
   api.use('raix:famono@0.9.19', { weak: true });
-  // famous-views is integrated a mandatory reference.
+
   api.use([
     'gadicohen:famous-views@0.1.27'
     ], 'client');
+
+  // Plugin code
   api.addFiles([
     'fview-boxlayout.coffee'
     ], 'client');
